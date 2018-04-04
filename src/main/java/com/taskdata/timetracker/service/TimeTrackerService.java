@@ -1,42 +1,42 @@
 package com.taskdata.timetracker.service;
 
 import com.taskdata.timetracker.domain.User;
-import com.taskdata.timetracker.domain.UserEvent;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
+import javax.xml.ws.ResponseWrapper;
 import java.util.Collection;
-import java.util.Date;
 
 @WebService(targetNamespace = TimeTrackerService.TARGET_NAMESPACE)
 public interface TimeTrackerService {
     public static final String TARGET_NAMESPACE = "http://taskdata.com/timetracker/ws";
 
     @WebMethod(action = "createUser")
-    @WebResult(name = "User")
-    User createUser(@WebParam(name = "Username") String username);
+    @ResponseWrapper(className = "com.taskdata.timetracker.service.CreateUserResponse")
+    @WebResult(name = "CreateUserResponse")
+    User createUser(@WebParam(name = "CreateUserRequest") CreateUserRequest createUserRequest);
 
     @WebMethod(action = "deleteUser")
-    @WebResult(name = "User")
-    User deleteUser(@WebParam(name = "Username") String username);
+    @ResponseWrapper(className = "com.taskdata.timetracker.service.DeleteUserResponse")
+    User deleteUser(@WebParam(name = "DeleteUserRequest") DeleteUserRequest deleteUserRequest);
 
     @WebMethod(action = "loginUser")
-    @WebResult(name = "User")
-    User loginUser(@WebParam(name = "Username") String username,
-                   @WebParam(name = "EventTimestamp") Date eventTimestamp);
+    @ResponseWrapper(className = "com.taskdata.timetracker.service.LoginUserResponse")
+    User loginUser(@WebParam(name = "LoginUserRequest") LoginUserRequest loginUserRequest);
 
     @WebMethod(action = "logoutUser")
-    @WebResult(name = "User")
-    User logoutUser(@WebParam(name = "Username") String username,
-                    @WebParam(name = "EventTimestamp") Date eventTimestamp);
+    @ResponseWrapper(className = "com.taskdata.timetracker.service.LogoutUserResponse")
+    User logoutUser(@WebParam(name = "LogoutUserRequest") LogoutUserRequest logoutUserRequest);
 
     @WebMethod(action = "createDailyReport")
-    Collection<User> createDailyReport(@WebParam(name = "Date") Date date);
+    @ResponseWrapper(className = "com.taskdata.timetracker.service.CreateDailyReportResponse")
+    Collection<User> createDailyReport(@WebParam(name = "CreateDailyRequest") CreateDailyReportRequest createDailyReportRequest);
 
-    @WebMethod(action = "createUserReport")
-    Collection<UserEvent> createUserReport(@WebParam(name = "Username") String username,
-                                           @WebParam(name = "StartDate") Date startDate,
-                                           @WebParam(name = "EndDate") Date endDate);
+//    @WebMethod(action = "createUserReport")
+//    @WebResult(name = "UserEvents")
+//    Collection<UserEvent> createUserReport(@WebParam(name = "Username") String username,
+//                                           @WebParam(name = "StartDate") Date startDate,
+//                                           @WebParam(name = "EndDate") Date endDate);
 }

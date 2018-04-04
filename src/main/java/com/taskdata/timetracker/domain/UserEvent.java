@@ -1,7 +1,9 @@
 package com.taskdata.timetracker.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.StringJoiner;
 
 @Entity
@@ -11,14 +13,20 @@ public class UserEvent {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column
     private EventType eventType;
 
-    private ZonedDateTime eventTimestamp;
+    @Column
+    private LocalDateTime eventTimestamp;
+
+    @ManyToOne
+    private User user;
+
 
     public UserEvent() {
     }
 
-    public UserEvent(EventType eventType, ZonedDateTime eventTimestamp) {
+    public UserEvent(EventType eventType, LocalDateTime eventTimestamp) {
         this.eventType = eventType;
         this.eventTimestamp = eventTimestamp;
     }
@@ -39,12 +47,16 @@ public class UserEvent {
         this.eventType = eventType;
     }
 
-    public ZonedDateTime getEventTimestamp() {
+    public LocalDateTime getEventTimestamp() {
         return eventTimestamp;
     }
 
-    public void setEventTimestamp(ZonedDateTime eventTimestamp) {
+    public void setEventTimestamp(LocalDateTime eventTimestamp) {
         this.eventTimestamp = eventTimestamp;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override
@@ -52,7 +64,8 @@ public class UserEvent {
         StringJoiner message = new StringJoiner(", ", getClass().getSimpleName() + "[", "]")
                 .add("id=" + id)
                 .add("type=" + eventType)
-                .add("timestamp=" + eventTimestamp);
+                .add("timestamp=" + eventTimestamp)
+                .add("user=" + user);
         return message.toString();
     }
 }

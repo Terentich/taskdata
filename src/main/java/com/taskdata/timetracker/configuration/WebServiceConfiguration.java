@@ -23,13 +23,32 @@ public class WebServiceConfiguration {
     }
 
     @Bean
-    public RouteBuilder routeToQueue() {
+    public RouteBuilder routeToQueue(TimeTrackerService timeTrackerService) {
         return new RouteBuilder() {
             @Override
             public void configure() {
-                from("cxf:bean:timeTrackerEndpoint")
+                from("cxf:bean:timeTrackerEndpoint?")
                         .log("Incoming message with the action '${header.soapAction}' and input data '${body}'")
-                        .toD("bean:timeTrackerService?method=${header.soapAction}");
+                        .toD("bean:timeTrackerService?method=${header.soapAction}")
+                        .log("Outcoming message data '${body}'");
+
+
+//                SoapJaxbDataFormat soapDF = new SoapJaxbDataFormat(TimeTrackerService.class.getPackage().getName(),
+//                        new ServiceInterfaceStrategy(TimeTrackerService.class, false));
+////                QName elementName = new QName("http://www.example.com/ZCSISUINT/",
+////                        "NewOperation");
+////                QNameStrategy strategy = new QNameStrategy(elementName);
+////                soapDF.setElementNameStrategy(strategy);
+//                from("cxf:bean:timeTrackerEndpoint")
+//                        .log("Incoming message with the action '${header.soapAction}' and input data '${body}'")
+//                        .onException(Exception.class)
+//                        .handled(true)
+//                        .marshal(soapDF)
+//                        .end()
+//                        .unmarshal(soapDF)
+//                        .bean(timeTrackerService)
+//                        .marshal(soapDF);
+
             }
         };
     }
